@@ -22,6 +22,7 @@ import { getPayment } from '../../../store/slices/payment/asyncThunks/getPayment
 import { sendMailBill } from '../../../store/slices/payment/asyncThunks/sendmailBill';
 import { getUserTransactions } from '../../../store/slices/transactions/asyncThunks/getUserTransactions';
 import { Loader } from '../../Loader';
+import { CurrencyType } from "../../../enums/currency.enum";
 
 interface Props {
   isButtons: boolean;
@@ -41,8 +42,8 @@ const Payment: FC<Props> = ({ isButtons }) => {
     email: '',
   });
 
-  const { id, datetime, amount, comment, status, store, type, text, url } =
-    payment ?? {};
+  const { id, datetime, amount, comment, status, store, type, text, url, currency } =
+  payment ?? {};
 
   const dispatch = useTypedDispatch();
   const router = useRouter();
@@ -60,7 +61,7 @@ const Payment: FC<Props> = ({ isButtons }) => {
     transactions?.filter((transaction) => transaction.payment?.id === id) || [];
 
   const domain = location.host;
-  
+
   useEffect(() => {
     dispatch(clearCourse());
   }, []);
@@ -75,7 +76,7 @@ const Payment: FC<Props> = ({ isButtons }) => {
     if (!payment) {
       return;
     }
-    
+
     const newCurrency = CurrencyFabric.create(payment.currency);
     newCurrency?.getCourse();
   }, [payment]);
@@ -162,11 +163,11 @@ const Payment: FC<Props> = ({ isButtons }) => {
   function cancelCurrentPayment() {
     dispatch(cancelPayment(id as number));
   }
-  
+
   if (paymentStatus.error) {
     return <p>Error</p>;
   }
-  
+
   if (paymentStatus.isLoading || payment === null) {
     return <Loader />;
   }
@@ -312,10 +313,26 @@ const Payment: FC<Props> = ({ isButtons }) => {
       <Col span={24} style={{ padding: '20px 0 0 20px', background: 'white' }}>
         <Statistic
           title="Amount"
-          value={`${+amount! / 1000000000} ${payment.currency} ($${course ? getUsdFromCrypto(+amount!, course) : '...'})`}
-          prefix={<AreaChartOutlined />}
+          value={
+            `
+            ${currency !== CurrencyType.Bitcoin ?
+              +amount! / 1000000000 : (+amount! / 1000000000) - 0.000_005
+            } ${payment.currency} 
+            ($${course ? getUsdFromCrypto(+amount!, course, currency) : '...'}
+            )
+          `
+          }
+          prefix={<AreaChartOutlined />
+          }
         />
       </Col>
+      {currency === CurrencyType.Bitcoin && <Col span={24} style={{ padding: '20px 0 0 20px', background: 'white' }}>
+        <Statistic
+          title="Amount for buyers"
+          value={`${(+amount! / 1000000000)} ${payment.currency} ($${course ? getUsdFromCrypto(+amount!, course) : '...'})`}
+          prefix={<AreaChartOutlined />}
+        />
+      </Col>}
       <Col span={24} style={{ padding: '20px 0 0 20px', background: 'white' }}>
         <Statistic
           title="Status"
@@ -335,7 +352,7 @@ const Payment: FC<Props> = ({ isButtons }) => {
       </Col>
       {(isButtons || payment?.status !== 'Paid') &&
       filterTransactions[filterTransactions.length - 1]?.status !==
-        'processing' ? (
+      'processing' ? (
         <>
           <Col
             span={24}
@@ -357,7 +374,7 @@ const Payment: FC<Props> = ({ isButtons }) => {
           >
             {(isButtons || payment?.status !== 'Paid') &&
             filterTransactions[filterTransactions.length - 1]?.status !==
-              'processing' ? (
+            'processing' ? (
               <Link href={`/bill/${url}`}>
                 <a
                   id="link"
@@ -376,7 +393,7 @@ const Payment: FC<Props> = ({ isButtons }) => {
                   {billUrl}
                 </a>
               </Link>
-              ) : null}
+            ) : null}
           </Col>
           {isButtons ? (
             <>
@@ -475,7 +492,7 @@ const Payment: FC<Props> = ({ isButtons }) => {
             </>
           ) : null}
         </>
-        ) : null}
+      ) : null}
 
       <Col span={24} style={{ padding: '20px 0 0px 0px' }}>
         {payment?.status === 'Paid' && !isButtons ? (

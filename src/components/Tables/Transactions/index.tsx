@@ -44,11 +44,13 @@ const Transactions = () => {
   const storesStatus = useTypedSelector((state) => state.stores.status);
   const user = useTypedSelector((state) => state.auth.data);
 
+  console.log('transactions', transactions);
+
   const router = useRouter();
   const dispatch = useTypedDispatch();
 
   const activeStores =
-    stores?.filter((store) => store.apiKey && !store.blocked) || [];
+    stores || [];
 
   useEffect(() => {
     if (user?.role === UserRole.Admin) {
@@ -73,6 +75,11 @@ const Transactions = () => {
    * @description handling every row,applying styles and a click event handler to it
    */
   const onRow = (record: any) => {
+    if (!record?.txHash) {
+      return {
+        onClick: () => {},
+      };
+    }
     return {
       style: { cursor: 'pointer' },
       onClick: () => router.push(`transactions/${record.txHash}`), // click row
@@ -102,14 +109,15 @@ const Transactions = () => {
     return <Loader />;
   }
 
+  console.log('activeStores', activeStores);
+
   return (
     <>
       {!activeStores.length && user.role !== UserRole.Admin ? (
         <p>Create a store to be able to check transactions</p>
       ) : null}
-      {user.role !== UserRole.Admin &&
-      activeStores.length &&
-      activeStores[0]?.name ? (
+      {activeStores.length &&
+       activeStores[0]?.name ? (
         <Select
           defaultValue={activeStores[0]?.name}
           style={{ width: 120, marginBottom: 20 }}

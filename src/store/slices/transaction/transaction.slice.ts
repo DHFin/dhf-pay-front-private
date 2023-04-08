@@ -10,6 +10,7 @@ import { Transaction } from '../../../interfaces/transaction.interface';
 import { generateTransaction } from './asyncThunks/generateTransaction';
 import { getLastTransaction } from './asyncThunks/getLastTransaction';
 import { getTransaction } from './asyncThunks/getTransaction';
+import { getBtcTransaction } from "./asyncThunks/getBtcTransaction";
 
 interface InitialState {
   data: Transaction | null;
@@ -57,6 +58,16 @@ const transactionSlice = createSlice({
       state.generateStatus = REJECT_FETCH_STATUS(error as string);
     });
     builder.addCase(generateTransaction.fulfilled, (state, { payload }) => {
+      state.generateStatus = FULFILLED_FETCH_STATUS;
+      state.generateData = payload;
+    });
+    builder.addCase(getBtcTransaction.pending, (state) => {
+      state.generateStatus = START_FETCH_STATUS;
+    });
+    builder.addCase(getBtcTransaction.rejected, (state, { payload: error }) => {
+      state.generateStatus = REJECT_FETCH_STATUS(error as string);
+    });
+    builder.addCase(getBtcTransaction.fulfilled, (state, { payload }) => {
       state.generateStatus = FULFILLED_FETCH_STATUS;
       state.generateData = payload;
     });

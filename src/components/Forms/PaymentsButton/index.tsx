@@ -95,6 +95,12 @@ const Buttons = () => {
       return callback();
     }
 
+    if (form.getFieldValue('currency') === CurrencyType.Bitcoin) {
+      if (course! * value < 0.99) {
+        return callback('Must be at least 1$');
+      }
+    }
+
     if (course! * value < 0.1) {
       return callback('Must be at least 0.1$');
     }
@@ -140,9 +146,11 @@ const Buttons = () => {
         return;
       }
       try {
+        const currencyBtc = form.getFieldValue('currency') === CurrencyType.Bitcoin;
+        const comment = form.getFieldValue('comment');
         await dispatch(
           addPayment({
-            data: { ...payment, currency: form.getFieldValue('currency') },
+            data: { ...payment, amount: currencyBtc ? +payment.amount + 0.000_005 : payment.amount, comment: comment, currency: form.getFieldValue('currency') },
             apiKey: currentStore!.apiKey,
           }),
         );
@@ -189,6 +197,15 @@ const Buttons = () => {
     currency.getCourse();
     form.setFields([{ name: 'currency', errors: [] }]);
     form.setFields([{ name: 'amount', errors: [] }]);
+  }
+
+  function getUiForAmount() {
+    const currency = form.getFieldValue('currency');
+    if (currency === CurrencyType.Bitcoin) {
+      return `Bitcoin amount: ${(+payment.amount + 0.000_005).toFixed(6)} / ${(course! * (+payment.amount + 0.000_005)).toFixed(2)}$`;
+    } else {
+      return (course! * +payment.amount).toFixed(2);
+    }
   }
 
   const handleResetForm = (event: any) => {
@@ -276,7 +293,7 @@ const Buttons = () => {
                 ? 'Loading'
                 : courseStatus.error
                   ? 'Error'
-                  : (course! * +payment.amount).toFixed(2)}
+                  : getUiForAmount()}
           </Form.Item>
           {!!activeStores.length && (
             <Form.Item

@@ -14,6 +14,7 @@ import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { CurrencyFabric } from '../../../modules/curriencies/currencyFabric';
 import { getTransaction } from '../../../store/slices/transaction/asyncThunks/getTransaction';
 import { Loader } from '../../Loader';
+import { CurrencyType } from "../../../enums/currency.enum";
 
 const Transaction = () => {
   const transaction = useTypedSelector((state) => state.transaction.data);
@@ -37,7 +38,7 @@ const Transaction = () => {
       return;
     }
     
-    const newCurrency = CurrencyFabric.create(transaction.payment.currency);
+    const newCurrency = CurrencyFabric.create(transaction?.payment?.currency);
     newCurrency.getCourse();
   }, [transaction]);
 
@@ -46,6 +47,19 @@ const Transaction = () => {
   if (transactionStatus.error || courseStatus.error) {
     router.push('/');
   }
+
+  const getLinkForCheckTransaction = () => {
+    switch (transaction?.payment?.currency) {
+      case CurrencyType.Bitcoin:
+        return `https://${process.env.NEXT_PUBLIC_BITCOIN_NETWORK_TESTNET}/${transaction.txHash}`;
+      case CurrencyType.Casper:
+        return `https://${process.env.NEXT_PUBLIC_CASPER_NETWORK}/deploy/${transaction.txHash}`;
+      case CurrencyType.Ethereum:
+        return;
+      default:
+        return '';
+    }
+  };
   
   if (transactionStatus.isLoading || transaction === null || courseStatus.isLoading || course === null) {
     return <Loader />;
@@ -83,7 +97,7 @@ const Transaction = () => {
       >
         <Statistic
           title="Amount"
-          value={`${+transaction.amount / 1000000000} ${transaction.payment.currency} ($${getUsdFromCrypto(+transaction.amount, course)})`}
+          value={`${+transaction?.amount / 1000000000} ${transaction?.payment?.currency} ($${getUsdFromCrypto(+transaction.amount, course)})`}
           prefix={<CommentOutlined />}
         />
       </Col>
@@ -91,11 +105,11 @@ const Transaction = () => {
         span={24}
         style={{ padding: '20px 0 20px 20px', background: 'white' }}
       >
-        <Statistic title="Status" value={status} prefix={<CommentOutlined />} />
+        <Statistic title="Status" value={transaction?.status} prefix={<CommentOutlined />} />
       </Col>
       {transaction.txHash ? (
         <Link
-          href={`https://${process.env.NEXT_PUBLIC_CASPER_NETWORK}/deploy/${transaction.txHash}`}
+          href={getLinkForCheckTransaction() as any}
         >
           <a target="_blank" rel="noreferrer">
             <Button style={{ margin: '20px 20px 0 0' }} type="primary">

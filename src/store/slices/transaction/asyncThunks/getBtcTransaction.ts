@@ -1,15 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { get } from '../../../../../api';
+import { RootState } from '../../../store';
 
 /**
- * @description Get a list of stores for a specific user.
- */ 
-const getUserStores = createAsyncThunk(
-  'getUserStores',
-  async (userId: number, { rejectWithValue, getState }) => {
+ * @description Getting a list of all transactions
+ */
+const getBtcTransaction = createAsyncThunk(
+  'getBtcTransaction',
+  async (id: number, { rejectWithValue, getState }) => {
     try {
-      const token = (getState() as any).auth?.data?.token;
-      const result = await get('/store', {
+      const token = (getState() as RootState).auth?.data?.token;
+      const result = await get(`/transaction/btc/${id ?? ''}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return result.data;
@@ -22,4 +23,4 @@ const getUserStores = createAsyncThunk(
   },
 );
 
-export { getUserStores };
+export { getBtcTransaction };

@@ -1,7 +1,7 @@
 import { CurrencyType } from '../enums/currency.enum';
 
 interface CreatePayment {
-  amount: string;
+  amount: string | number;
   comment: string;
   currency: CurrencyType;
 }

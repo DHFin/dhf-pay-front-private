@@ -9,6 +9,7 @@ import { clearCourse } from '../../../store/slices/course/course.slice';
 import { addPayment } from '../../../store/slices/payment/asyncThunks/addPayment';
 import { getUserStores } from '../../../store/slices/stores/asyncThunks/getUserStores';
 import { Loader } from '../../Loader';
+import { generateTransaction } from "../../../store/slices/transaction/asyncThunks/generateTransaction";
 
 const { Option } = Select;
 
@@ -55,6 +56,12 @@ const InvoicesBuilder = () => {
       }
       return callback();
     }
+
+    if (form.getFieldValue('currency') === CurrencyType.Bitcoin) {
+      if (course! * value < 0.99) {
+        return callback('Must be at least 1$');
+      }
+    }
     
     if (course! * value < 0.1) {
       return callback('Must be at least 0.1$');
@@ -90,12 +97,19 @@ const InvoicesBuilder = () => {
         return;
       }
       try {
-        await dispatch(
+        const currencyBtc = form.getFieldValue('currency') === CurrencyType.Bitcoin;
+        const comment = form.getFieldValue('comment');
+        const paymentId = await dispatch(
           addPayment({
-            data: { ...payment, currency: form.getFieldValue('currency') },
+            data: { amount: currencyBtc ? +payment.amount + 0.000_005 : payment.amount, comment: comment, currency: form.getFieldValue('currency') },
             apiKey: currentStore!.apiKey,
-          }),
+          }) as any,
         );
+        if (currencyBtc) {
+          if (paymentId?.payload?.id) {
+            dispatch(generateTransaction({ paymentId: paymentId.payload.id }));
+          }
+        }
         setPayment(createPaymentInitialState);
         message.success('Payment was added');
         form.resetFields();
@@ -127,6 +141,15 @@ const InvoicesBuilder = () => {
         current.wallets.find((wallet) => wallet.currency === el),
       ),
     );
+  }
+
+  function getUiForAmount() {
+    const currency = form.getFieldValue('currency');
+    if (currency === CurrencyType.Bitcoin) {
+      return `Bitcoin amount: ${(+payment.amount + 0.000_005).toFixed(6)} / ${(course! * (+payment.amount + 0.000_005)).toFixed(2)}$`;
+    } else {
+      return (course! * +payment.amount).toFixed(2);
+    }
   }
 
   useEffect(() => {
@@ -175,7 +198,7 @@ const InvoicesBuilder = () => {
                 { validator: validateAmount },
               ]}
             >
-              <Input type="number" onChange={onChangePayment('amount')} />
+              <Input disabled={!form.getFieldValue('currency')} type="number" onChange={onChangePayment('amount')} />
             </Form.Item>
             <Form.Item label="Currency" name="currency">
               <Select
@@ -189,14 +212,14 @@ const InvoicesBuilder = () => {
                 defaultValue={'Please select store' as CurrencyType}
               />
             </Form.Item>
-            <Form.Item label="Amount USD">
+            <Form.Item label="Amount USD for buyer">
               {!currentStore
                 ? 'Please select store'
                 : courseStatus.isLoading
                   ? 'Loading'
                   : courseStatus.error
                     ? 'Error'
-                    : (course! * +payment.amount).toFixed(2)}
+                    : getUiForAmount()}
             </Form.Item>
             <Form.Item label="Comment" name="comment">
               <Input.TextArea autoSize onChange={onChangePayment('comment')} />

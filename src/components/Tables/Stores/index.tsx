@@ -90,7 +90,7 @@ const Stores = () => {
         columns={columns}
         scroll={{ x: 0 }}
         onRow={onRow}
-        dataSource={storesTable?.map((store) => ({ ...store, availableCurrencies: store.wallets.map((wallet) => wallet.currency).join(', ') })) || []}
+        dataSource={storesTable?.map((store) => ({ ...store, availableCurrencies: store?.wallets?.map((wallet) => wallet.currency).join(', ') })) || []}
       />
     </>
   );

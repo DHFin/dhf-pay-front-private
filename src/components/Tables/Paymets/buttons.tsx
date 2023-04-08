@@ -53,9 +53,10 @@ interface Props {
 }
 
 const PaymentsButton: FC<Props> = ({ currentTable, onRow, currentPage, changePage, totalPages }) => {
+  const filtered = currentTable?.filter((el: any) => !!el.type);
   return (
     <>
-    <Table columns={columns} scroll={{ x: 0 }} onRow={onRow} pagination={false} dataSource={currentTable?.map((item: any) => {
+    <Table columns={columns} scroll={{ x: 0 }} onRow={onRow} pagination={false} dataSource={filtered?.map((item: any) => {
       return {
         ...item,
         amount: item.amount / 1000000000,

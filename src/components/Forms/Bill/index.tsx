@@ -14,6 +14,7 @@ import { Loader } from '../../Loader';
 import CasperBill from './components/CasperBill';
 import { DefaultBill } from './components/DefaultBill';
 import { EthereumBill } from './components/EthereumBill';
+import { BitcoinBill } from './components/BitcoinBill/BitcoinBill';
 
 /**
  *
@@ -87,6 +88,11 @@ const Bill = () => {
             payment={payment}
             transaction={transaction as Transaction}
           />
+        );
+      }
+      case CurrencyType.Bitcoin: {
+        return (
+          <BitcoinBill billInfo={payment as Payment}  course={course as number} />
         );
       }
       default: {

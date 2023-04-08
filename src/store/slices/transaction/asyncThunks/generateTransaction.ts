@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { post } from '../../../../../api';
 
-const generateTransaction = createAsyncThunk<any, number>(
+const generateTransaction = createAsyncThunk<any, { paymentId: number }, any>(
   'generateTransaction',
-  async (paymentId, { rejectWithValue, getState }) => {
+  async ({ paymentId}, { rejectWithValue, getState }) => {
     try {
       const token = (getState() as any).auth?.data?.token;
       const result = await post('/transaction/generateWallet', {

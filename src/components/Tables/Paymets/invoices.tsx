@@ -1,5 +1,6 @@
 import { Pagination, Table } from 'antd';
 import React, { FC } from 'react';
+import { CurrencyType } from "../../../enums/currency.enum";
 
 const columns = [
   {
@@ -57,7 +58,7 @@ const PaymentsInvoices: FC<Props> = ({ currentTable, onRow, currentPage, changeP
         dataSource={filterTable.map((item: any) => {
           return {
             ...item,
-            amount: item.amount / 1_000_000_000,
+            amount: item.currency === CurrencyType.Bitcoin ? (item.amount / 1_000_000_000) - 0.000_005 : item.amount / 1_000_000_000,
           };
         })}
       />
