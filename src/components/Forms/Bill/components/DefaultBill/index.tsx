@@ -22,22 +22,18 @@ interface Props {
 const DefaultBill: FC<Props> = memo(({ billInfo, course }) => {
   const transaction = useTypedSelector((state) => state.transaction.generateData);
   const transactionStatus = useTypedSelector((state) => state.transaction.generateStatus);
-  
-  const dispatch = useTypedDispatch();
-  
-  useEffect(() => {
-    if (billInfo.currency === CurrencyType.USDT) {
-      return;
-    }
-    dispatch(generateTransaction(billInfo.id));
-  }, []);
+  //
+  // const dispatch = useTypedDispatch();
+  //
+  // useEffect(() => {
+  //   if (billInfo.currency === CurrencyType) {
+  //     return;
+  //   }
+  //   dispatch(generateTransaction(billInfo.id as number));
+  // }, []);
   
   if (transactionStatus.error) {
     return <p>Error</p>;
-  }
-  
-  if (transactionStatus.isLoading || (!transaction?.walletForTransaction && CurrencyType.USDT !== billInfo.currency)) {
-    return <Loader />;
   }
   
   return (

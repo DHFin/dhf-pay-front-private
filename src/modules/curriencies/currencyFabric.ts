@@ -12,12 +12,6 @@ class CurrencyFabric {
       case CurrencyType.Bitcoin: {
         return new Bitcoin();
       }
-      case CurrencyType.Doge: {
-        return new Doge();
-      }
-      case CurrencyType.USDT: {
-        return new USDT();
-      }
       case CurrencyType.Casper: {
         return new Casper();
       }
