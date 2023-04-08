@@ -1,7 +1,7 @@
 import { Select, Table } from 'antd';
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { UserRole } from '../../../modules/user/enums/userRole.enum';
@@ -36,6 +36,7 @@ const columns = [
 ];
 
 const Transactions = () => {
+  // const [selectStore, setSelectStore] = useState('');
   const transactionsStatus = useTypedSelector(
     (state) => state.transactions.status,
   );
@@ -43,8 +44,6 @@ const Transactions = () => {
   const stores = useTypedSelector((state) => state.stores.data);
   const storesStatus = useTypedSelector((state) => state.stores.status);
   const user = useTypedSelector((state) => state.auth.data);
-
-  console.log('transactions', transactions);
 
   const router = useRouter();
   const dispatch = useTypedDispatch();
@@ -89,8 +88,9 @@ const Transactions = () => {
   /**
    * @description handling change of select store and get transactions by a specific store api key
    */
-  function handleChange(value: string) {
-    dispatch(getUserTransactions(value));
+  function handleChange(value: any) {
+    console.log('value', value);
+    dispatch(getUserTransactions(value?.apiKey));
   }
 
   if (

@@ -84,7 +84,7 @@ const BitcoinBill: FC<Props> = ({ billInfo, course }) => {
           prefix={<CommentOutlined />}
         />
       </Col>
-      {billInfo?.type && billInfo?.status !== 'Paid' ?
+      {billInfo?.type || billInfo?.status !== 'Paid' ?
         <Col
           span={24}
           style={{ padding: '20px 0 20px 20px', background: 'white' }}
