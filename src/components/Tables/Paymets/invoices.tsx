@@ -1,6 +1,6 @@
 import { Pagination, Table } from 'antd';
 import React, { FC } from 'react';
-import { CurrencyType } from "../../../enums/currency.enum";
+import { CurrencyType } from '../../../enums/currency.enum';
 
 const columns = [
   {

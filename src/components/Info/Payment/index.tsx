@@ -22,7 +22,7 @@ import { getPayment } from '../../../store/slices/payment/asyncThunks/getPayment
 import { sendMailBill } from '../../../store/slices/payment/asyncThunks/sendmailBill';
 import { getUserTransactions } from '../../../store/slices/transactions/asyncThunks/getUserTransactions';
 import { Loader } from '../../Loader';
-import { CurrencyType } from "../../../enums/currency.enum";
+import { CurrencyType } from '../../../enums/currency.enum';
 
 interface Props {
   isButtons: boolean;
@@ -393,7 +393,7 @@ const Payment: FC<Props> = ({ isButtons }) => {
                   {billUrl}
                 </a>
               </Link>
-            ) : null}
+              ) : null}
           </Col>
           {isButtons ? (
             <>
@@ -492,7 +492,7 @@ const Payment: FC<Props> = ({ isButtons }) => {
             </>
           ) : null}
         </>
-      ) : null}
+        ) : null}
 
       <Col span={24} style={{ padding: '20px 0 0px 0px' }}>
         {payment?.status === 'Paid' && !isButtons ? (

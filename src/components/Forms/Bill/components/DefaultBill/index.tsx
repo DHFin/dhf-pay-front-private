@@ -4,14 +4,10 @@ import {
   CommentOutlined,
 } from '@ant-design/icons';
 import { Col, Statistic } from 'antd';
-import React, { FC, memo, useEffect } from 'react';
+import React, { FC, memo } from 'react';
 import { getUsdFromCrypto } from '../../../../../../utils/getUsdFromCrypto';
-import { CurrencyType } from '../../../../../enums/currency.enum';
-import { useTypedDispatch } from '../../../../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../../../../hooks/useTypedSelector';
 import { Payment } from '../../../../../interfaces/payment.interface';
-import { generateTransaction } from '../../../../../store/slices/transaction/asyncThunks/generateTransaction';
-import { Loader } from '../../../../Loader';
 
 interface Props {
   billInfo: Payment;

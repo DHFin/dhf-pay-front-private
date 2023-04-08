@@ -9,7 +9,7 @@ import { clearCourse } from '../../../store/slices/course/course.slice';
 import { addPayment } from '../../../store/slices/payment/asyncThunks/addPayment';
 import { getUserStores } from '../../../store/slices/stores/asyncThunks/getUserStores';
 import { Loader } from '../../Loader';
-import { generateTransaction } from "../../../store/slices/transaction/asyncThunks/generateTransaction";
+import { generateTransaction } from '../../../store/slices/transaction/asyncThunks/generateTransaction';
 
 const { Option } = Select;
 

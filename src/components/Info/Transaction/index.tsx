@@ -14,7 +14,7 @@ import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { CurrencyFabric } from '../../../modules/curriencies/currencyFabric';
 import { getTransaction } from '../../../store/slices/transaction/asyncThunks/getTransaction';
 import { Loader } from '../../Loader';
-import { CurrencyType } from "../../../enums/currency.enum";
+import { CurrencyType } from '../../../enums/currency.enum';
 
 const Transaction = () => {
   const transaction = useTypedSelector((state) => state.transaction.data);
