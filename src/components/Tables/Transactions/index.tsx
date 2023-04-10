@@ -1,7 +1,7 @@
 import { Select, Table } from 'antd';
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { UserRole } from '../../../modules/user/enums/userRole.enum';
