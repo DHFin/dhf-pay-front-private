@@ -7,6 +7,7 @@ import { get } from '../../../../../api';
 const getUserTransactions = createAsyncThunk(
   'getUserTransactions',
   async (apiKey: string, { rejectWithValue }) => {
+    console.log('apiKey', apiKey);
     try {
       const result = await get('/transaction', {
         headers: { Authorization: `Bearer ${apiKey}` },

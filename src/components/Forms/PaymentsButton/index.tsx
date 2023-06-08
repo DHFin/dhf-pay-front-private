@@ -200,12 +200,7 @@ const Buttons = () => {
   }
 
   function getUiForAmount() {
-    const currency = form.getFieldValue('currency');
-    if (currency === CurrencyType.Bitcoin) {
-      return `Bitcoin amount: ${(+payment.amount + 0.000_005).toFixed(6)} / ${(course! * (+payment.amount + 0.000_005)).toFixed(2)}$`;
-    } else {
-      return (course! * +payment.amount).toFixed(2);
-    }
+    return `${(course! * +payment.amount).toFixed(2)} $`;
   }
 
   const handleResetForm = (event: any) => {

@@ -1,7 +1,7 @@
 import { Select, Table } from 'antd';
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { UserRole } from '../../../modules/user/enums/userRole.enum';
@@ -9,8 +9,6 @@ import { getUserStores } from '../../../store/slices/stores/asyncThunks/getUserS
 import { getTransactions } from '../../../store/slices/transactions/asyncThunks/getTransactions';
 import { getUserTransactions } from '../../../store/slices/transactions/asyncThunks/getUserTransactions';
 import { Loader } from '../../Loader';
-
-const { Option } = Select;
 
 const columns = [
   {
@@ -45,11 +43,13 @@ const Transactions = () => {
   const storesStatus = useTypedSelector((state) => state.stores.status);
   const user = useTypedSelector((state) => state.auth.data);
 
-  const router = useRouter();
-  const dispatch = useTypedDispatch();
-
   const activeStores =
     stores || [];
+
+  const [selectStore, setSelectStore] = useState(activeStores[0]?.name);
+
+  const router = useRouter();
+  const dispatch = useTypedDispatch();
 
   useEffect(() => {
     if (user?.role === UserRole.Admin) {
@@ -89,8 +89,8 @@ const Transactions = () => {
    * @description handling change of select store and get transactions by a specific store api key
    */
   function handleChange(value: any) {
-    console.log('value', value);
-    dispatch(getUserTransactions(value?.apiKey));
+    setSelectStore(value);
+    dispatch(getUserTransactions(value));
   }
 
   if (
@@ -119,16 +119,11 @@ const Transactions = () => {
       {activeStores.length &&
        activeStores[0]?.name ? (
         <Select
-          defaultValue={activeStores[0]?.name}
           style={{ width: 120, marginBottom: 20 }}
           onChange={handleChange}
-        >
-          {activeStores.map((store) => (
-            <Option key={store.id} value={store.apiKey}>
-              {store.name}
-            </Option>
-          ))}
-        </Select>
+          value={selectStore}
+          options={activeStores.map((store) => ({ label: store.name, value: store.apiKey }))}
+        />
         ) : null}
       <Table
         columns={columns}

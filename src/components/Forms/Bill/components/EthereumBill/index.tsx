@@ -234,7 +234,7 @@ const EthereumBill: FC<EthereumBillProps> = ({
                 type="primary"
                 size={'large'}
               >
-                Check last transaction
+                Check transaction
               </Button>
             </a>
           </Link>

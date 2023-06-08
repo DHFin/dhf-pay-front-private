@@ -22,7 +22,6 @@ import { getPayment } from '../../../store/slices/payment/asyncThunks/getPayment
 import { sendMailBill } from '../../../store/slices/payment/asyncThunks/sendmailBill';
 import { getUserTransactions } from '../../../store/slices/transactions/asyncThunks/getUserTransactions';
 import { Loader } from '../../Loader';
-import { CurrencyType } from '../../../enums/currency.enum';
 
 interface Props {
   isButtons: boolean;
@@ -314,25 +313,14 @@ const Payment: FC<Props> = ({ isButtons }) => {
         <Statistic
           title="Amount"
           value={
-            `
-            ${currency !== CurrencyType.Bitcoin ?
-              +amount! / 1000000000 : (+amount! / 1000000000) - 0.000_005
-            } ${payment.currency} 
+            `${+amount! / 1000000000} ${payment.currency} 
             ($${course ? getUsdFromCrypto(+amount!, course, currency) : '...'}
-            )
-          `
+            )`
           }
           prefix={<AreaChartOutlined />
           }
         />
       </Col>
-      {currency === CurrencyType.Bitcoin && <Col span={24} style={{ padding: '20px 0 0 20px', background: 'white' }}>
-        <Statistic
-          title="Amount for buyers"
-          value={`${(+amount! / 1000000000)} ${payment.currency} ($${course ? getUsdFromCrypto(+amount!, course) : '...'})`}
-          prefix={<AreaChartOutlined />}
-        />
-      </Col>}
       <Col span={24} style={{ padding: '20px 0 0 20px', background: 'white' }}>
         <Statistic
           title="Status"

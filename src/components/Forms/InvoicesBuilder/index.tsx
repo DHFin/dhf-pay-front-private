@@ -82,6 +82,8 @@ const InvoicesBuilder = () => {
     validate('amount');
   };
 
+  console.log('payment', payment);
+
   /**
    * @description save the payment and return the response
    */
@@ -101,7 +103,7 @@ const InvoicesBuilder = () => {
         const comment = form.getFieldValue('comment');
         const paymentId = await dispatch(
           addPayment({
-            data: { amount: currencyBtc ? +payment.amount + 0.000_005 : payment.amount, comment: comment, currency: form.getFieldValue('currency') },
+            data: { amount: payment.amount, comment: comment, currency: form.getFieldValue('currency') },
             apiKey: currentStore!.apiKey,
           }) as any,
         );
@@ -144,12 +146,7 @@ const InvoicesBuilder = () => {
   }
 
   function getUiForAmount() {
-    const currency = form.getFieldValue('currency');
-    if (currency === CurrencyType.Bitcoin) {
-      return `Bitcoin amount: ${(+payment.amount + 0.000_005).toFixed(6)} / ${(course! * (+payment.amount + 0.000_005)).toFixed(2)}$`;
-    } else {
-      return (course! * +payment.amount).toFixed(2);
-    }
+    return `${(course! * +payment.amount).toFixed(2)} $`;
   }
 
   useEffect(() => {
@@ -212,7 +209,7 @@ const InvoicesBuilder = () => {
                 defaultValue={'Please select store' as CurrencyType}
               />
             </Form.Item>
-            <Form.Item label="Amount USD for buyer">
+            <Form.Item label="Amount USD">
               {!currentStore
                 ? 'Please select store'
                 : courseStatus.isLoading

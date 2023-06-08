@@ -10,6 +10,11 @@ interface Transaction {
   amount: string;
   payment: Payment;
   receiver: string;
+  fees: {
+    economyFee: string | number,
+    avarageFee: string | number,
+    fastestFee: string | number,
+  }
   walletForTransaction: null | string;
 }
 
