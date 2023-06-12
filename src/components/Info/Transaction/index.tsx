@@ -51,11 +51,11 @@ const Transaction = () => {
   const getLinkForCheckTransaction = () => {
     switch (transaction?.payment?.currency) {
       case CurrencyType.Bitcoin:
-        return `https://${process.env.NEXT_PUBLIC_BITCOIN_NETWORK_TESTNET}/${transaction.txHash}`;
+        return `https://${process.env.NEXT_PUBLIC_BITCOIN_NETWORK}/${transaction.txHash}`;
       case CurrencyType.Casper:
         return `https://${process.env.NEXT_PUBLIC_CASPER_NETWORK}/deploy/${transaction.txHash}`;
       case CurrencyType.Ethereum:
-        return;
+        return `${process.env.NEXT_PUBLIC_ETH_TESTNET}${transaction.txHash}`;
       default:
         return '';
     }
@@ -80,7 +80,7 @@ const Transaction = () => {
       <Col span={24} style={{ padding: '20px 0 0 20px', background: 'white' }}>
         <Statistic
           title="Receiver"
-          value={transaction.receiver}
+          value={transaction.receiver.value}
           prefix={<AreaChartOutlined />}
         />
       </Col>

@@ -9,7 +9,9 @@ interface Transaction {
   sender: string;
   amount: string;
   payment: Payment;
-  receiver: string;
+  receiver: {
+    value: string;
+  };
   fees: {
     economyFee: string | number,
     avarageFee: string | number,
