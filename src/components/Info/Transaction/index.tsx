@@ -54,8 +54,8 @@ const Transaction = () => {
         return `https://${process.env.NEXT_PUBLIC_BITCOIN_NETWORK}/${transaction.txHash}`;
       case CurrencyType.Casper:
         return `https://${process.env.NEXT_PUBLIC_CASPER_NETWORK}/deploy/${transaction.txHash}`;
-      case CurrencyType.Ethereum:
-        return `${process.env.NEXT_PUBLIC_ETH_TESTNET}${transaction.txHash}`;
+      // case CurrencyType.Ethereum:
+      //   return `${process.env.NEXT_PUBLIC_ETH_TESTNET}${transaction.txHash}`;
       default:
         return '';
     }

@@ -2,7 +2,7 @@ import { CurrencyType } from '../../enums/currency.enum';
 import { BaseCurrency } from './baseCurrency';
 import { Bitcoin } from './bitcoin';
 import { Casper } from './casper';
-import { Ethereum } from './ethereum';
+// import { Ethereum } from './ethereum';
 
 class CurrencyFabric {
   static create(currency: CurrencyType): BaseCurrency {
@@ -13,9 +13,9 @@ class CurrencyFabric {
       case CurrencyType.Casper: {
         return new Casper();
       }
-      case CurrencyType.Ethereum: {
-        return new Ethereum();
-      }
+      // case CurrencyType.Ethereum: {
+      //   return new Ethereum();
+      // }
     }
   }
 }

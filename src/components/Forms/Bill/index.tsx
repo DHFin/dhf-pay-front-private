@@ -1,6 +1,6 @@
-import { DAppProvider } from '@usedapp/core';
+// import { DAppProvider } from '@usedapp/core';
 import React, { useEffect } from 'react';
-import { configDapp } from '../../../../ethConfig/config';
+// import { configDapp } from '../../../../ethConfig/config';
 import { CurrencyType } from '../../../enums/currency.enum';
 import { useTypedDispatch } from '../../../hooks/useTypedDispatch';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
@@ -13,7 +13,7 @@ import { getLastTransaction } from '../../../store/slices/transaction/asyncThunk
 import { Loader } from '../../Loader';
 import CasperBill from './components/CasperBill';
 import { DefaultBill } from './components/DefaultBill';
-import { EthereumBill } from './components/EthereumBill';
+// import { EthereumBill } from './components/EthereumBill';
 import { BitcoinBill } from './components/BitcoinBill/BitcoinBill';
 
 /**
@@ -68,18 +68,18 @@ const Bill = () => {
 
   function getBill() {
     switch (payment?.currency) {
-      case CurrencyType.Ethereum: {
-        return (
-          <DAppProvider config={configDapp}>
-            <EthereumBill
-              billInfo={payment}
-              course={course}
-              transaction={transaction as Transaction}
-              date={new Date()}
-            />
-          </DAppProvider>
-        );
-      }
+      // case CurrencyType.Ethereum: {
+      //   return (
+      //     <DAppProvider config={configDapp}>
+      //       <EthereumBill
+      //         billInfo={payment}
+      //         course={course}
+      //         transaction={transaction as Transaction}
+      //         date={new Date()}
+      //       />
+      //     </DAppProvider>
+      //   );
+      // }
       case CurrencyType.Casper: {
         return (
           <CasperBill
