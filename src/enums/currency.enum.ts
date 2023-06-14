@@ -2,7 +2,7 @@ enum CurrencyType {
   // USDT = 'USDT',
   Bitcoin = 'BTC',
   // Doge = 'DOGE',
-  Ethereum = 'ETH',
+  // Ethereum = 'ETH',
   Casper = 'CSPR',
 }
 
